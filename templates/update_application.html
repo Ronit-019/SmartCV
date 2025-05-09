@@ -1,0 +1,22 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Update Application Status</title>
+</head>
+<body>
+    <h2>Update Application Status</h2>
+    <form method="POST">
+        <label for="status">Choose Status:</label>
+        <select name="status" id="status">
+            <option value="Under Review" {% if application.status == 'Under Review' %}selected{% endif %}>Under Review</option>
+            <option value="Accepted" {% if application.status == 'Accepted' %}selected{% endif %}>Accepted</option>
+            <option value="Rejected" {% if application.status == 'Rejected' %}selected{% endif %}>Rejected</option>
+        </select>
+        <button type="submit">Update Status</button>
+    </form>
+</body>
+</html>

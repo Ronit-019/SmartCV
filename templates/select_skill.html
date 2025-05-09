@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Select Skill | Coding Test Platform</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .skill-card {
+      transition: transform 0.2s, box-shadow 0.2s;
+      border-left: 4px solid #6c757d;
+    }
+    .skill-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-left: 4px solid #007bff;
+    }
+    .skill-link {
+      display: block;
+      padding: 1rem;
+      color: #212529;
+      text-decoration: none;
+    }
+    .skill-link:hover {
+      color: #007bff;
+    }
+    .page-header {
+      border-bottom: 2px solid #f8f9fa;
+      margin-bottom: 2rem;
+      padding-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container py-5">
+    <header class="page-header">
+      <h1 class="display-5 fw-bold text-center">Skill Assessment</h1>
+      <p class="lead text-center text-muted">Select a skill below to begin your coding test</p>
+    </header>
+
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-md-10">
+        <div class="card shadow-sm">
+          <div class="card-header bg-light">
+            <h2 class="h5 mb-0">Available Skills</h2>
+          </div>
+          <div class="list-group list-group-flush">
+            {% for skill in skills %}
+              <div class="list-group-item skill-card">
+                <a href="{{ url_for('coding_test') }}?skill={{ skill }}" class="skill-link d-flex justify-content-between align-items-center">
+                  <span class="fw-medium">{{ skill|capitalize }}</span>
+                  <span class="badge bg-light text-dark rounded-pill"><i class="bi bi-arrow-right"></i> Start</span>
+                </a>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <div class="text-center mt-4">
+          <a href="javascript:history.back()" class="btn btn-outline-secondary">Go Back</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+</body>
+</html>

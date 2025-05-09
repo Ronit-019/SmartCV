@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SmartCV | Profile</title>
+  <style>
+    :root {
+      --primary-color: #4e73df;
+      --primary-hover: #3a5fc7;
+      --secondary-color: #858796;
+      --light-bg: #f8f9fc;
+      --border-color: #e3e6f0;
+      --danger: #e74a3b;
+      --danger-hover: #c73a2d;
+      --text-dark: #3a3b45;
+      --text-light: #858796;
+      --success: #1cc88a;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--light-bg);
+      color: var(--text-dark);
+      line-height: 1.5;
+    }
+
+    .profile-container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 1.5rem;
+      background-color: #fff;
+      border-radius: 0.5rem;
+      box-shadow: 0 0.15rem 1.75rem rgba(0, 0, 0, 0.15);
+    }
+
+    .profile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .profile-header h2 {
+      margin: 0;
+      color: var(--text-dark);
+      font-weight: 600;
+    }
+
+    .profile-navigation {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .profile-section {
+      margin-bottom: 2rem;
+      padding: 1.25rem;
+      background-color: #fff;
+      border-radius: 0.35rem;
+      border: 1px solid var(--border-color);
+    }
+
+    .profile-section h3 {
+      margin-bottom: 1rem;
+      color: var(--text-dark);
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .profile-info {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .info-item strong {
+      display: block;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--text-light);
+      margin-bottom: 0.25rem;
+    }
+
+    .info-item p {
+      font-size: 1rem;
+      color: var(--text-dark);
+    }
+
+    .skill-tag {
+      display: inline-block;
+      padding: 0.35rem 0.75rem;
+      margin: 0.25rem;
+      background-color: var(--light-bg);
+      border-radius: 1rem;
+      font-size: 0.85rem;
+      font-weight: 500;
+    }
+
+    .file-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background-color: var(--light-bg);
+      color: var(--primary-color);
+      border-radius: 0.35rem;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .file-link:hover {
+      background-color: #e8eaf6;
+    }
+
+    .test-result {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .test-result:last-child {
+      border-bottom: none;
+    }
+
+    .test-score {
+      font-weight: 600;
+      color: var(--primary-color);
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border-radius: 0.35rem;
+      border: none;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-hover);
+    }
+
+    .btn-secondary {
+      background-color: var(--secondary-color);
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background-color: #6e707e;
+    }
+
+    .btn-danger {
+      background-color: var(--danger);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background-color: var(--danger-hover);
+    }
+
+    .toast-container {
+      position: fixed;
+      bottom: 1rem;
+      right: 1rem;
+      z-index: 9999;
+    }
+
+    .toast {
+      padding: 1rem;
+      margin-bottom: 0.5rem;
+      border-radius: 0.35rem;
+      background-color: white;
+      box-shadow: 0 0.15rem 1.75rem rgba(0, 0, 0, 0.15);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      width: 300px;
+      animation: fadeIn 0.3s;
+    }
+
+    .toast-success {
+      border-left: 4px solid var(--success);
+    }
+
+    .toast-error {
+      border-left: 4px solid var(--danger);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive styles */
+    @media (max-width: 768px) {
+      .profile-info {
+        grid-template-columns: 1fr;
+      }
+
+      .profile-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .profile-navigation {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="profile-container">
+    <div class="profile-header">
+      <h2>Your Profile</h2>
+      <div class="profile-navigation">
+        <button class="btn btn-secondary" id="backBtn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 12L6 8L10 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Go Back
+        </button>
+        <button class="btn btn-primary" id="editProfileBtn">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M11.5 2.5L13.5 4.5M11.5 2.5L8 6L10 8L13.5 4.5M11.5 2.5L13.5 4.5M10 8L11 12L8 14L3 9L5 6M5 6L2 3L3 2L6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Edit Profile
+        </button>
+      </div>
+    </div>
+
+    <div class="profile-section">
+      <h3>Personal Information</h3>
+      <div class="profile-info">
+        <div class="info-item">
+          <strong>Full Name</strong>
+          <p id="user-name">{{ student.name }}</p>
+        </div>
+        <div class="info-item">
+          <strong>Email Address</strong>
+          <p id="user-email">{{ student.email }}</p>
+        </div>
+        <div class="info-item">
+          <strong>Account Type</strong>
+          <p id="user-role">{{ student.role | title }}</p>
+        </div>
+      </div>
+    </div>
+
+    {% if student.role == 'student' %}
+    <div class="profile-section" id="student-details">
+      <h3>Student Details</h3>
+      <div class="profile-info">
+        {% if student.phone %}
+        <div class="info-item">
+          <strong>Phone Number</strong>
+          <p>{{ student.phone }}</p>
+        </div>
+        {% endif %}
+        {% if student.education %}
+        <div class="info-item">
+          <strong>Education</strong>
+          <p>{{ student.education }}</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="profile-section">
+      <h3>Skills</h3>
+      <div>
+        {% if student.skills %}
+          {% for skill in student.skills.split(',') %}
+            <span class="skill-tag">{{ skill.strip() }}</span>
+          {% endfor %}
+        {% else %}
+          <p>No skills added yet.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="profile-section">
+      <h3>Your CV</h3>
+      {% if student.cv_path %}
+        <a href="{{ url_for('static', filename=student.cv_path) }}" class="file-link" target="_blank">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 1V12M8 12L4 8M8 12L12 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M1 15H15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          View CV
+        </a>
+      {% else %}
+        <p>No CV uploaded yet.</p>
+      {% endif %}
+    </div>
+
+    <div class="profile-section">
+      <h3>Test Results</h3>
+      {% if test_scores %}
+        {% for skill, score in test_scores %}
+        <div class="test-result">
+          <div>{{ skill | capitalize }}</div>
+          <div class="test-score">{{ score }} / 20</div>
+        </div>
+        {% endfor %}
+      {% else %}
+        <p>No test results available yet.</p>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    {% if student.role == 'company' %}
+    <div class="profile-section" id="company-details">
+      <h3>Company Details</h3>
+      <div class="profile-info">
+        {% if student.company_name %}
+        <div class="info-item">
+          <strong>Company Name</strong>
+          <p>{{ student.company_name }}</p>
+        </div>
+        {% endif %}
+        {% if student.industry %}
+        <div class="info-item">
+          <strong>Industry</strong>
+          <p>{{ student.industry }}</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="profile-section">
+      <button class="btn btn-danger" id="deleteAccountBtn">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 4H14M12.6667 4L12 13.3333C12 14.2538 11.2538 15 10.3333 15H5.66667C4.74619 15 4 14.2538 4 13.3333L3.33333 4M6 4V2.66667C6 1.74619 6.74619 1 7.66667 1H8.33333C9.25381 1 10 1.74619 10 2.66667V4M6.66667 7.33333V11.6667M9.33333 7.33333V11.6667" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Delete Account
+      </button>
+    </div>
+  </div>
+
+  <div class="toast-container"></div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Go Back Button Functionality
+      document.getElementById('backBtn').addEventListener('click', function() {
+        window.history.back();
+      });
+
+      // Edit Profile Button Functionality
+      document.getElementById('editProfileBtn').addEventListener('click', function() {
+        window.location.href = '/edit-profile';  // Adjust the URL as needed
+      });
+
+      // Delete Account Button Functionality
+      document.getElementById('deleteAccountBtn').addEventListener('click', function() {
+        if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+          // Handle account deletion - you would replace this with your actual implementation
+          fetch('/delete-account', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'same-origin'
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              showToast('Account successfully deleted. Redirecting...', 'success');
+              setTimeout(() => {
+                window.location.href = '/logout';  // Adjust the URL as needed
+              }, 2000);
+            } else {
+              showToast('Error deleting account. Please try again.', 'error');
+            }
+          })
+          .catch(error => {
+            showToast('Error connecting to server. Please try again.', 'error');
+          });
+        }
+      });
+
+      // Toast notification function
+      function showToast(message, type = 'success') {
+        const toastContainer = document.querySelector('.toast-container');
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.innerHTML = message;
+        toastContainer.appendChild(toast);
+
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          setTimeout(() => {
+            toastContainer.removeChild(toast);
+          }, 300);
+        }, 3000);
+      }
+    });
+  </script>
+</body>
+</html>
+

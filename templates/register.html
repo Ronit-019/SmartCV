@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SmartCV</title>
+  <style>
+    /* CSS Reset & Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      /* Color Palette */
+      --primary: #3a86ff;
+      --primary-dark: #2667d4;
+      --secondary: #8ecae6;
+      --accent: #ffd166;
+      --success: #70e000;
+      --warning: #ffbe0b;
+      --danger: #ef476f;
+      --neutral-100: #f8f9fa;
+      --neutral-200: #e9ecef;
+      --neutral-300: #dee2e6;
+      --neutral-400: #ced4da;
+      --neutral-500: #adb5bd;
+      --neutral-600: #6c757d;
+      --neutral-700: #495057;
+      --neutral-800: #343a40;
+      --neutral-900: #212529;
+
+      /* Typography */
+      --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      --heading-line-height: 1.2;
+      --body-line-height: 1.6;
+
+      /* Spacing & Layout */
+      --spacing-xs: 0.25rem;
+      --spacing-sm: 0.5rem;
+      --spacing-md: 1rem;
+      --spacing-lg: 1.5rem;
+      --spacing-xl: 2.5rem;
+      --spacing-xxl: 4rem;
+
+      /* Border Radius */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 16px;
+
+      /* Shadows */
+      --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+
+      /* Transitions */
+      --transition-fast: 150ms ease-in-out;
+      --transition-normal: 300ms ease-in-out;
+    }
+
+    body {
+      font-family: var(--font-family);
+      line-height: var(--body-line-height);
+      color: var(--neutral-800);
+      background-color: var(--neutral-100);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--spacing-md);
+    }
+
+    .register-container {
+      background-color: white;
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      width: 100%;
+      max-width: 600px;
+      padding: var(--spacing-xl);
+      text-align: center;
+      margin: var(--spacing-xl) 0;
+    }
+
+    .register-logo {
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .register-header {
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .register-header h2 {
+      color: var(--neutral-800);
+      font-size: 1.75rem;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .register-header p {
+      color: var(--neutral-600);
+    }
+
+    .form-group {
+      margin-bottom: var(--spacing-lg);
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: var(--spacing-xs);
+      color: var(--neutral-700);
+      font-weight: 500;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      padding: var(--spacing-md);
+      font-size: 1rem;
+      border: 1px solid var(--neutral-300);
+      border-radius: var(--radius-md);
+      transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.2);
+    }
+
+    .form-input.error,
+    .form-select.error,
+    .form-textarea.error {
+      border-color: var(--danger);
+    }
+
+    .form-textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .form-file {
+      display: block;
+      width: 100%;
+      padding: var(--spacing-md);
+      background-color: var(--neutral-100);
+      border: 1px dashed var(--neutral-400);
+      border-radius: var(--radius-md);
+      text-align: center;
+      cursor: pointer;
+      transition: background-color var(--transition-fast), border-color var(--transition-fast);
+    }
+
+    .form-file:hover {
+      background-color: var(--neutral-200);
+      border-color: var(--primary);
+    }
+
+    .form-file input[type="file"] {
+      display: none;
+    }
+
+    .form-file-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--spacing-sm);
+      color: var(--neutral-600);
+    }
+
+    .form-file-icon {
+      color: var(--primary);
+      font-size: 24px;
+    }
+
+    .role-selector {
+      display: flex;
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .role-option {
+      flex: 1;
+      border: 2px solid var(--neutral-200);
+      border-radius: var(--radius-md);
+      padding: var(--spacing-lg);
+      cursor: pointer;
+      transition: all var(--transition-normal);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+
+    .role-option:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .role-option.active {
+      border-color: var(--primary);
+      background-color: rgba(58, 134, 255, 0.05);
+    }
+
+    .role-option svg {
+      color: var(--primary);
+      width: 36px;
+      height: 36px;
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .role-option span {
+      font-weight: 500;
+    }
+
+    .input-error-message {
+      color: var(--danger);
+      font-size: 0.875rem;
+      margin-top: var(--spacing-xs);
+      display: none;
+    }
+
+    .input-error-message.visible {
+      display: block;
+    }
+
+    .btn {
+      display: inline-block;
+      font-weight: 500;
+      text-align: center;
+      white-space: nowrap;
+      vertical-align: middle;
+      user-select: none;
+      border: none;
+      padding: var(--spacing-sm) var(--spacing-lg);
+      font-size: 1rem;
+      line-height: 1.5;
+      border-radius: var(--radius-md);
+      transition: all var(--transition-fast);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.3);
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+      width: 100%;
+      padding: var(--spacing-md);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .login-link {
+      margin-top: var(--spacing-lg);
+      color: var(--neutral-600);
+    }
+
+    .login-link a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+
+    .form-row {
+      display: flex;
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .form-col {
+      flex: 1;
+    }
+
+    /* Toast notification */
+    .toast-container {
+      position: fixed;
+      bottom: var(--spacing-lg);
+      right: var(--spacing-lg);
+      z-index: 1000;
+    }
+
+    .toast {
+      background-color: white;
+      color: var(--neutral-800);
+      padding: var(--spacing-md) var(--spacing-lg);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-lg);
+      margin-top: var(--spacing-md);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transform: translateX(120%);
+      transition: transform var(--transition-normal);
+      min-width: 300px;
+    }
+
+    .toast.visible {
+      transform: translateX(0);
+    }
+
+    .toast.success {
+      border-left: 4px solid var(--success);
+    }
+
+    .toast.warning {
+      border-left: 4px solid var(--warning);
+    }
+
+    .toast.error {
+      border-left: 4px solid var(--danger);
+    }
+
+    .toast-close {
+      background: none;
+      border: none;
+      color: var(--neutral-500);
+      cursor: pointer;
+      font-size: 1.2rem;
+    }
+
+    /* Ripple Effect */
+    .btn .ripple {
+      position: absolute;
+      border-radius: 50%;
+      transform: scale(0);
+      animation: ripple 600ms linear;
+      background-color: rgba(255, 255, 255, 0.7);
+    }
+
+    @keyframes ripple {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+
+    /* For screens smaller than 768px */
+    @media (max-width: 768px) {
+      .form-row {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+      }
+
+      .register-container {
+        padding: var(--spacing-lg);
+      }
+
+      .role-selector {
+        flex-direction: column;
+      }
+    }
+      /* CSS Styles */
+.password-field {
+  position: relative;
+}
+
+.toggle-password {
+  position: absolute;
+  right: var(--spacing-md);
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--neutral-500);
+  cursor: pointer;
+}
+  </style>
+</head>
+<body>
+  <div class="register-container">
+    <div class="register-logo">
+      <!-- Logo SVG -->
+      <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="60" height="60" rx="12" fill="#3A86FF"/>
+        <path d="M20 30H40M20 20H40M20 40H30" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+
+    <div class="register-header">
+      <h2>Create an Account</h2>
+      <p>Join SmartCV </p>
+    </div>
+
+    <form action="/register" method="POST" enctype="multipart/form-data" id="registerForm">
+      <!-- Role Selector -->
+      <div class="role-selector">
+        <div class="role-option active" data-role="student" id="studentRoleOption">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 15C15.866 15 19 12.3137 19 9C19 5.68629 15.866 3 12 3C8.13401 3 5 5.68629 5 9C5 12.3137 8.13401 15 12 15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12 15V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9 18H15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Student</span>
+        </div>
+        <div class="role-option" data-role="company" id="companyRoleOption">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 21H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M5 21V7L13 3V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M19 21V12L13 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9 9H9.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9 13H9.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9 17H9.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span>Company</span>
+        </div>
+      </div>
+
+      <input type="hidden" id="role" name="role" value="student">
+
+      <!-- Common Fields -->
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" class="form-input" placeholder="Enter your email address" required>
+        <div class="input-error-message" id="email-error"></div>
+      </div>
+
+<div class="form-group">
+  <label for="password">Password</label>
+  <div class="password-field">
+    <input type="password" id="password" name="password" class="form-input" placeholder="Enter your password" required>
+    <button type="button" class="toggle-password" id="togglePassword">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 5C7 5 2.73 8.11 1 12.5C2.73 16.89 7 20 12 20C17 20 21.27 16.89 23 12.5C21.27 8.11 17 5 12 5ZM12 17.5C9.24 17.5 7 15.26 7 12.5C7 9.74 9.24 7.5 12 7.5C14.76 7.5 17 9.74 17 12.5C17 15.26 14.76 17.5 12 17.5ZM12 9.5C10.34 9.5 9 10.84 9 12.5C9 14.16 10.34 15.5 12 15.5C13.66 15.5 15 14.16 15 12.5C15 10.84 13.66 9.5 12 9.5Z" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+  <div class="input-error-message" id="password-error"></div>
+</div>
+
+
+
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" name="phone" class="form-input" placeholder="Enter your phone number">
+        <div class="input-error-message" id="phone-error"></div>
+      </div>
+
+      <!-- Student Fields -->
+      <div id="studentFields">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" class="form-input" placeholder="Enter your full name" required>
+          <div class="input-error-message" id="name-error"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="education">Education</label>
+          <input type="text" id="education" name="education" class="form-input" placeholder="E.g. B.Tech in CSE">
+          <div class="input-error-message" id="education-error"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="skills">Skills</label>
+          <input type="text" id="skills" name="skills" class="form-input" placeholder="E.g. Python, ML, SQL">
+          <div class="input-error-message" id="skills-error"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="cv_file">Upload CV (PDF)</label>
+          <div class="form-file">
+            <label for="cv_file" class="form-file-label">
+              <svg class="form-file-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 5V19M12 5L7 10M12 5L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M19 14V17C19 18.1046 18.1046 19 17 19H7C5.89543 19 5 18.1046 5 17V14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <span id="file-name">Choose PDF file</span>
+            </label>
+            <input type="file" id="cv_file" name="cv_file" accept=".pdf">
+          </div>
+          <div class="input-error-message" id="cv-error"></div>
+        </div>
+      </div>
+
+      <!-- Company Fields -->
+      <div id="companyFields" style="display: none;">
+        <div class="form-group">
+          <label for="company_name">Company Name</label>
+          <input type="text" id="company_name" name="company_name" class="form-input" placeholder="Enter company name">
+          <div class="input-error-message" id="company-name-error"></div>
+        </div>
+
+        <div class="form-group">
+          <label for="industry">Industry</label>
+          <input type="text" id="industry" name="industry" class="form-input" placeholder="Enter industry">
+          <div class="input-error-message" id="industry-error"></div>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" id="registerButton">Create Account</button>
+    </form>
+
+    <div class="login-link">
+      <p>Already have an account? <a href="/login">Log in here</a></p>
+    </div>
+  </div>
+
+  <div class="toast-container"></div>
+ {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Role switcher
+      const roleInput = document.getElementById('role');
+      const studentRoleOption = document.getElementById('studentRoleOption');
+      const companyRoleOption = document.getElementById('companyRoleOption');
+      const studentFields = document.getElementById('studentFields');
+      const companyFields = document.getElementById('companyFields');
+      const studentNameInput = document.getElementById('name');
+      const companyNameInput = document.getElementById('company_name');
+      const cvFileInput = document.getElementById('cv_file');
+      const industryInput = document.getElementById('industry');
+
+      studentRoleOption.addEventListener('click', function() {
+        setActiveRole('student');
+      });
+
+      companyRoleOption.addEventListener('click', function() {
+        setActiveRole('company');
+      });
+const togglePassword = document.getElementById('togglePassword');
+const passwordInput = document.getElementById('password');
+
+togglePassword.addEventListener('click', function() {
+  const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+  passwordInput.setAttribute('type', type);
+
+  // Change the icon based on visibility
+  if (type === 'text') {
+    this.innerHTML = `
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 7C14.76 7 17 9.24 17 12C17 12.65 16.87 13.26 16.64 13.83L19.56 16.75C21.07 15.49 22.26 13.86 23 12C21.27 7.61 17 4.5 12 4.5C10.6 4.5 9.26 4.75 8 5.2L10.17 7.37C10.74 7.13 11.35 7 12 7ZM2 4.27L4.28 6.55L4.74 7.01C3.08 8.3 1.78 10.02 1 12C2.73 16.39 7 19.5 12 19.5C13.55 19.5 15.03 19.2 16.38 18.66L16.8 19.08L19.73 22L21 20.73L3.27 3L2 4.27ZM7.53 9.8L9.08 11.35C9.03 11.56 9 11.78 9 12C9 13.66 10.34 15 12 15C12.22 15 12.44 14.97 12.65 14.92L14.2 16.47C13.53 16.8 12.79 17 12 17C9.24 17 7 14.76 7 12C7 11.21 7.2 10.47 7.53 9.8ZM11.84 9.02L14.99 12.17L15.01 12.01C15.01 10.35 13.67 9.01 12.01 9.01L11.84 9.02Z" fill="currentColor"/>
+      </svg>
+    `;
+  } else {
+    this.innerHTML = `
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 5C7 5 2.73 8.11 1 12.5C2.73 16.89 7 20 12 20C17 20 21.27 16.89 23 12.5C21.27 8.11 17 5 12 5ZM12 17.5C9.24 17.5 7 15.26 7 12.5C7 9.74 9.24 7.5 12 7.5C14.76 7.5 17 9.74 17 12.5C17 15.26 14.76 17.5 12 17.5ZM12 9.5C10.34 9.5 9 10.84 9 12.5C9 14.16 10.34 15.5 12 15.5C13.66 15.5 15 14.16 15 12.5C15 10.84 13.66 9.5 12 9.5Z" fill="currentColor"/>
+      </svg>
+    `;
+  }
+});
+      function setActiveRole(role) {
+        // Update role input value
+        roleInput.value = role;
+
+        // Update UI
+        if (role === 'student') {
+          studentRoleOption.classList.add('active');
+          companyRoleOption.classList.remove('active');
+          studentFields.style.display = 'block';
+          companyFields.style.display = 'none';
+
+          // Update required attributes
+          studentNameInput.required = true;
+          companyNameInput.required = false;
+          industryInput.required = false;
+        } else {
+          studentRoleOption.classList.remove('active');
+          companyRoleOption.classList.add('active');
+          studentFields.style.display = 'none';
+          companyFields.style.display = 'block';
+
+          // Update required attributes
+          studentNameInput.required = false;
+          companyNameInput.required = true;
+          industryInput.required = true;
+        }
+      }
+
+      // File input handling
+      const fileInput = document.getElementById('cv_file');
+      const fileNameDisplay = document.getElementById('file-name');
+
+      fileInput.addEventListener('change', function() {
+        if (this.files.length > 0) {
+          fileNameDisplay.textContent = this.files[0].name;
+        } else {
+          fileNameDisplay.textContent = 'Choose PDF file';
+        }
+      });
+
+      // Ripple effect for buttons
+      const buttons = document.querySelectorAll('.btn');
+
+      buttons.forEach(button => {
+        button.addEventListener('click', function(e) {
+          const x = e.clientX - e.target.getBoundingClientRect().left;
+          const y = e.clientY - e.target.getBoundingClientRect().top;
+
+          const ripple = document.createElement('span');
+          ripple.classList.add('ripple');
+          ripple.style.left = `${x}px`;
+          ripple.style.top = `${y}px`;
+
+          this.appendChild(ripple);
+
+          setTimeout(() => {
+            ripple.remove();
+          }, 600);
+        });
+      });
+
+      // Form validation
+      const registerForm = document.getElementById('registerForm');
+
+      registerForm.addEventListener('submit', function(e) {
+        let isValid = true;
+
+        // Reset all error states
+        const errorElements = document.querySelectorAll('.input-error-message');
+        errorElements.forEach(el => {
+          el.classList.remove('visible');
+        });
+
+        const inputElements = document.querySelectorAll('.form-input');
+        inputElements.forEach(el => {
+          el.classList.remove('error');
+        });
+
+        // Validate email
+        const emailInput = document.getElementById('email');
+        if (emailInput.value.trim() === '') {
+          showError(emailInput, 'email-error', 'Email is required');
+          isValid = false;
+        } else if (!isValidEmail(emailInput.value)) {
+          showError(emailInput, 'email-error', 'Please enter a valid email address');
+          isValid = false;
+        }
+
+        // Validate password
+        const passwordInput = document.getElementById('password');
+        if (passwordInput.value === '') {
+          showError(passwordInput, 'password-error', 'Password is required');
+          isValid = false;
+        } else if (passwordInput.value.length < 8) {
+          showError(passwordInput, 'password-error', 'Password must be at least 8 characters');
+          isValid = false;
+        }
+
+        // Validate role-specific fields
+        if (roleInput.value === 'student') {
+          if (studentNameInput.value.trim() === '') {
+            showError(studentNameInput, 'name-error', 'Name is required');
+            isValid = false;
+          }
+
+          // CV file validation is not required but if provided should be PDF
+          if (fileInput.files.length > 0 && !fileInput.files[0].name.toLowerCase().endsWith('.pdf')) {
+            showError(null, 'cv-error', 'Please upload a PDF file');
+            isValid = false;
+          }
+        } else {
+          if (companyNameInput.value.trim() === '') {
+            showError(companyNameInput, 'company-name-error', 'Company name is required');
+            isValid = false;
+          }
+
+          if (industryInput.value.trim() === '') {
+            showError(industryInput, 'industry-error', 'Industry is required');
+            isValid = false;
+          }
+        }
+
+        if (!isValid) {
+          e.preventDefault();
+          showToast('Please fix the errors in the form', 'error');
+        } else {
+          // This is just for demo purposes - in a real app, form would submit to server
+          showToast('Creating your account...', 'success');
+        }
+      });
+
+      function showError(inputElement, errorId, message) {
+        const errorElement = document.getElementById(errorId);
+        errorElement.textContent = message;
+        errorElement.classList.add('visible');
+
+        if (inputElement) {
+          inputElement.classList.add('error');
+        }
+      }
+
+      function isValidEmail(email) {
+        const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+      }
+    });
+
+    // Toast notification function
+    function showToast(message, type = 'success') {
+      const toastContainer = document.querySelector('.toast-container');
+
+      const toast = document.createElement('div');
+      toast.classList.add('toast', type);
+
+      toast.innerHTML = `
+        <div>${message}</div>
+        <button class="toast-close">&times;</button>
+      `;
+
+      toastContainer.appendChild(toast);
+
+      // Make the toast visible after a small delay
+      setTimeout(() => {
+        toast.classList.add('visible');
+      }, 10);
+
+      // Auto-remove after 5 seconds
+      const timeout = setTimeout(() => {
+        removeToast(toast);
+      }, 5000);
+
+      // Close button functionality
+      const closeBtn = toast.querySelector('.toast-close');
+      closeBtn.addEventListener('click', () => {
+        clearTimeout(timeout);
+        removeToast(toast);
+      });
+    }
+
+    function removeToast(toast) {
+      toast.classList.remove('visible');
+
+      // Remove from DOM after transition completes
+      setTimeout(() => {
+        toast.remove();
+      }, 300);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coding Test - {{ selected_skill|capitalize }}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.36.1/min/vs/loader.min.js"></script>
+  <style>
+    :root {
+      --primary-color: #0d6efd;
+      --danger-color: #dc3545;
+      --warning-color: #ffc107;
+      --success-color: #198754;
+    }
+
+    body {
+      background-color: #f8f9fa;
+    }
+
+    .main-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background-color: #fff;
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+      border-radius: 0.5rem;
+      padding: 2rem;
+    }
+
+    .editor-container {
+      height: 350px;
+      border: 1px solid #dee2e6;
+      border-radius: 0.375rem;
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+
+    pre.output {
+      background-color: #f8f9fa;
+      padding: 1rem;
+      border-radius: 0.375rem;
+      white-space: pre-wrap;
+      border: 1px solid #dee2e6;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .problem-card {
+      margin-bottom: 2rem;
+      border: none;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+
+    .timer-display {
+      font-size: 1.5rem;
+      font-weight: bold;
+      font-family: monospace;
+    }
+
+    .timer-container {
+      position: sticky;
+      top: 1rem;
+      z-index: 100;
+    }
+
+    .badge {
+      font-weight: 500;
+      padding: 0.5em 0.75em;
+    }
+
+    .card-header {
+      background-color: rgba(13, 110, 253, 0.05);
+    }
+
+    .header-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid #e9ecef;
+      padding-bottom: 1rem;
+    }
+
+    .btn-submit {
+      padding: 0.75rem 2rem;
+      font-weight: 500;
+    }
+
+    .result-section {
+      margin-top: 3rem;
+      border-top: 2px solid #e9ecef;
+      padding-top: 2rem;
+    }
+
+    .score-badge {
+      font-size: 1rem;
+      padding: 0.5rem 1rem;
+    }
+
+    .feedback-text {
+      font-style: italic;
+      color: #6c757d;
+    }
+
+    .navigation-buttons {
+      margin-top: 2rem;
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+<div class="container-fluid py-4">
+  <div class="main-container">
+    <div class="header-section">
+      <div>
+        <h1 class="h2 mb-1">Coding Test</h1>
+        <p class="text-muted mb-0">{{ selected_skill|capitalize }}</p>
+      </div>
+      <a href="javascript:history.back()" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left"></i> Go Back
+      </a>
+    </div>
+
+    <p class="lead mb-4">Complete the following coding problems to test your {{ selected_skill|capitalize }} skills.</p>
+<div id="start-test-container" class="alert alert-info text-center mb-4 p-4 rounded">
+  <h4 class="mb-3">Start Your Test</h4>
+  <p>Once you click <strong>Start Test</strong>, the timer will begin and you must complete all questions within <strong>30 minutes</strong>.</p>
+  <button id="start-test-button" class="btn btn-lg btn-success mt-2">
+    <i class="bi bi-play-circle me-1"></i> Start Test
+  </button>
+</div>
+
+
+    <div class="timer-container">
+      <div class="alert alert-warning d-flex align-items-center justify-content-between">
+        <div>
+          <i class="bi bi-clock-history me-2"></i>
+          <strong>Time Remaining:</strong>
+        </div>
+        <span class="timer-display" id="timer">30:00</span>
+      </div>
+    </div>
+{% if not results %}
+    <div id="test-section" style="display:none;">
+
+    <form id="code-form" method="POST" action="{{ url_for('coding_test', skill=selected_skill) }}">
+      <input type="hidden" id="form-submitted" name="form_submitted" value="false">
+
+      {% for problem in test_problems %}
+  <div class="card problem-card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <h5 class="mb-0 d-flex align-items-center">
+        <span class="badge bg-secondary rounded-pill me-2">{{ loop.index }}</span>
+        Problem {{ loop.index }}
+      </h5>
+      <span class="badge bg-primary">{{ selected_skill|capitalize }}</span>
+    </div>
+    <div class="card-body">
+      <div class="problem-description mb-3">
+        <p class="card-text">{{ problem.problem }}</p>
+      </div>
+      <textarea id="code-area-{{ loop.index }}" name="code-{{ loop.index }}" style="display: none;">{{ request.form.get('code-' ~ loop.index, '') }}</textarea>
+      <div id="monaco-editor-{{ loop.index }}" class="editor-container"></div>
+      <input type="hidden" name="language-{{ loop.index }}" value="{{ selected_skill.lower() }}">
+
+      <!-- Run button + Output -->
+      <button type="button" class="btn btn-outline-primary mt-2" onclick="runCode({{ loop.index }})">
+        <i class="bi bi-play-circle me-1"></i> Run Code
+      </button>
+      <pre class="output mt-3" id="output-{{ loop.index }}">Output will appear here...</pre>
+    </div>
+  </div>
+{% endfor %}
+
+      <div class="navigation-buttons">
+        <a href="javascript:history.back()" class="btn btn-outline-secondary">
+          <i class="bi bi-arrow-left"></i> Cancel & Go Back
+        </a>
+        <button type="submit" class="btn btn-primary btn-lg btn-submit" id="submit-button">
+          <i class="bi bi-code-slash me-2"></i>Run & Submit Code
+        </button>
+      </div>
+    </form>
+    </div>
+{% endif %}
+    {% if results %}
+      <div class="result-section">
+        <div class="card">
+          <div class="card-header bg-info text-white">
+            <h4 class="mb-0">Results</h4>
+          </div>
+          <div class="card-body">
+            {% for result in results %}
+              <div class="problem-result mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h5 class="mb-0">Problem {{ loop.index }} Output:</h5>
+                  <span class="badge bg-{% if scores[loop.index0] >= 7 %}success{% elif scores[loop.index0] >= 4 %}warning{% else %}danger{% endif %} score-badge">
+                    Score: {{ scores[loop.index0] }}/10
+                  </span>
+                </div>
+                <pre class="output">{{ result }}</pre>
+                <p class="feedback-text mt-2">{{ feedback[loop.index0] }}</p>
+              </div>
+              {% if not loop.last %}<hr>{% endif %}
+            {% endfor %}
+
+            <div class="total-score mt-4 p-4 bg-light rounded border">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h5 class="mb-0">Total Score:</h5>
+                <h5 class="mb-0">{{ total_score }}/{{ total_possible }}</h5>
+              </div>
+              <div class="progress" style="height: 25px;">
+                <div class="progress-bar {% if (total_score / total_possible * 100) > 70 %}bg-success{% elif (total_score / total_possible * 100) > 40 %}bg-warning{% else %}bg-danger{% endif %}"
+                  style="width: {{ (total_score / total_possible * 100)|round|int }}%">
+                  {{ (total_score / total_possible * 100)|round|int }}%
+                </div>
+              </div>
+
+              <div class="mt-4 text-center">
+                <a href="{{ url_for('coding_test') }}?skill={{ selected_skill }}" class="btn btn-primary">
+                  <i class="bi bi-arrow-repeat me-2"></i>Try Again
+                </a>
+                <a href="{{ url_for('select_skill') }}" class="btn btn-outline-secondary ms-2">
+                  <i class="bi bi-arrow-left me-2"></i>Back to Skills
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+  let editors = [];
+document.addEventListener('DOMContentLoaded', function() {
+
+
+const startButton = document.getElementById('start-test-button');
+const testSection = document.getElementById('test-section');
+const timerContainer = document.querySelector('.timer-container');
+
+if (startButton) {
+  timerContainer.style.display = 'none';  // Hide timer initially
+
+  startButton.addEventListener('click', function () {
+    document.getElementById('start-test-container').style.display = 'none';
+    testSection.style.display = 'block';
+    timerContainer.style.display = 'block';
+    startTimer(); // Start the countdown
+  });
+}
+  const timerDisplay = document.getElementById('timer');
+  const codeForm = document.getElementById('code-form');
+
+  const isResultPage = {{ 'true' if results else 'false' }};
+  if (isResultPage) {
+    localStorage.removeItem('coding_timer_remaining');
+    localStorage.removeItem('form_submitted');
+    return;
+  }
+
+  if (localStorage.getItem('form_submitted') === 'true') {
+    localStorage.removeItem('coding_timer_remaining');
+    localStorage.removeItem('form_submitted');
+  }
+
+  let secondsRemaining = parseInt(localStorage.getItem('coding_timer_remaining')) || 30 * 60;
+<!--  let interval;-->
+function startTimer() {
+  secondsRemaining = 1800;  // 30 minutes
+  updateTimerDisplay();     // Show 30:00 immediately
+  interval = setInterval(() => {
+    secondsRemaining--;
+    localStorage.setItem('coding_timer_remaining', secondsRemaining);
+    updateTimerDisplay();
+    if (secondsRemaining <= 0) {
+      stopTimer();
+      alert('Time is up! Your answers will be submitted.');
+      codeForm.submit();
+    }
+  }, 1000);
+}
+
+window.runCode = function(index) {
+  const editorValue = editors.find(e => e.index === index).editor.getValue();
+  const lang = "{{ selected_skill.lower() }}";
+  const outputEl = document.getElementById(`output-${index}`);
+
+  outputEl.textContent = 'Running...';
+
+  fetch('/run_code', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      language: lang,
+      code: editorValue
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.error) {
+      outputEl.textContent = `Error:\n${data.error}\n\n${data.output}`;
+    } else {
+      outputEl.textContent = data.output || 'No output.';
+    }
+  })
+  .catch(err => {
+    outputEl.textContent = 'Failed to run code: ' + err.message;
+  });
+};
+
+
+  function updateTimerDisplay() {
+    const minutes = Math.floor(secondsRemaining / 60);
+    const seconds = secondsRemaining % 60;
+    timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    if (secondsRemaining <= 300) {
+      timerDisplay.parentElement.classList.remove('alert-warning');
+      timerDisplay.parentElement.classList.add('alert-danger');
+    }
+  }
+
+  function stopTimer() {
+    clearInterval(interval);
+    localStorage.removeItem('coding_timer_remaining');
+  }
+
+  interval = setInterval(() => {
+    secondsRemaining--;
+    localStorage.setItem('coding_timer_remaining', secondsRemaining);
+    updateTimerDisplay();
+    if (secondsRemaining <= 0) {
+      stopTimer();
+      alert('Time is up! Your answers will be submitted.');
+      codeForm.submit();
+    }
+  }, 1000);
+
+  window.addEventListener('beforeunload', function (e) {
+    if (!isResultPage && !localStorage.getItem('form_submitted')) {
+      e.preventDefault();
+      e.returnValue = 'You have unsaved code. Are you sure you want to leave?';
+      return e.returnValue;
+    }
+  });
+
+  require.config({
+    paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.36.1/min/vs' }
+  });
+
+  require(['vs/editor/editor.main'], function() {
+    const totalProblems = {{ test_problems|length }};
+    const selectedLanguage = "{{ selected_skill.lower() }}";
+    const languageMap = {
+      'python': 'python',
+      'java': 'java',
+      'javascript': 'javascript',
+      'js': 'javascript',
+      'cpp': 'cpp',
+      'c++': 'cpp',
+      'sql': 'sql',
+      'c#': 'csharp',
+      'csharp': 'csharp',
+      'go': 'go',
+      'ruby': 'ruby',
+      'php': 'php',
+      'typescript': 'typescript'
+    };
+<!--    const editors = [];-->
+
+    function getStarterCode(lang) {
+      switch(lang) {
+        case 'python':
+          return '# Write your Python code here';
+        case 'java':
+          return ' // Write your code here\n ';
+        case 'javascript':
+        case 'js':
+          return '// Write your JavaScript code here\n\nfunction solution() {\n    // Implement your solution\n    return null;\n}\n\nconsole.log(solution());';
+        case 'cpp':
+        case 'c++':
+          return '#include <iostream>\n\nusing namespace std;\n\n// Write your C++ code here\nbool solution() {\n    // Implement your solution\n    return false;\n}\n\nint main() {\n    cout << (solution() ? "true" : "false") << endl;\n    return 0;\n}';
+        case 'go':
+          return 'package main\n\nimport "fmt"\n\n// Write your Go code here\nfunc solution() bool {\n    // Implement your solution\n    return false\n}\n\nfunc main() {\n    fmt.Println(solution())\n}';
+        case 'sql':
+          return '-- Write your SQL query here\nSELECT * FROM table_name WHERE condition;';
+        default:
+          return '// Write your code here';
+      }
+    }
+
+    for (let i = 1; i <= totalProblems; i++) {
+      const textArea = document.getElementById(`code-area-${i}`);
+      const initialValue = textArea.value || getStarterCode(selectedLanguage);
+      const editor = monaco.editor.create(document.getElementById(`monaco-editor-${i}`), {
+        value: initialValue,
+        language: languageMap[selectedLanguage] || 'plaintext',
+        theme: 'vs-dark',
+        automaticLayout: true,
+        minimap: { enabled: false },
+        scrollBeyondLastLine: false,
+        renderLineHighlight: 'all',
+        lineNumbers: 'on',
+        folding: true,
+        fontSize: 14,
+        tabSize: 2,
+        wordWrap: 'on',
+        contextmenu: true,
+        scrollbar: {
+          useShadows: false,
+          verticalScrollbarSize: 10,
+          horizontalScrollbarSize: 10
+        }
+      });
+      editors.push({ index: i, editor });
+    }
+
+    codeForm.addEventListener('submit', (e) => {
+      stopTimer();
+      document.getElementById('form-submitted').value = 'true';
+      localStorage.setItem('form_submitted', 'true');
+      editors.forEach(obj => {
+        document.getElementById(`code-area-${obj.index}`).value = obj.editor.getValue();
+      });
+    });
+  });
+});
+</script>
+</body>
+</html>
+
+
+
+
+

@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartCV - Connect Talent with Opportunity</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #3b82f6;
+            --light: #f8fafc;
+            --dark: #0f172a;
+            --success: #10b981;
+            --info: #06b6d4;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            background-color: var(--light);
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-600 { animation-delay: 0.6s; }
+
+        /* Navbar */
+        .navbar {
+            padding: 15px 0;
+            transition: all 0.3s ease;
+            background-color: rgba(255, 255, 255, 0.95) !important;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.04);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            font-size: 1.6rem;
+            color: var(--primary) !important;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: #64748b !important;
+            transition: all 0.2s ease;
+            padding: 8px 16px !important;
+        }
+
+        .nav-link:hover {
+            color: var(--primary) !important;
+        }
+
+        .nav-item.active .nav-link {
+            color: var(--primary) !important;
+        }
+
+        .btn-login {
+            border-radius: 8px;
+            padding: 8px 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-register {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            border-radius: 8px;
+            padding: 8px 20px;
+            font-weight: 600;
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .btn-register:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-dark), var(--secondary));
+            color: white;
+            padding: 100px 0 120px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0 0 25px 25px;
+            margin-bottom: 60px;
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.15);
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB4PSIwIiB5PSIwIiB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSgxMCkiPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjA1KSI+PC9yZWN0PjwvcGF0dGVybj48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXR0ZXJuKSI+PC9yZWN0Pjwvc3ZnPg==');
+            opacity: 0.2;
+        }
+
+        .hero-section h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            margin-bottom: 25px;
+            line-height: 1.2;
+            letter-spacing: -1px;
+        }
+
+        .hero-section p {
+            font-size: 1.4rem;
+            max-width: 800px;
+            margin: 0 auto 40px;
+            opacity: 0.95;
+            font-weight: 400;
+        }
+
+        .hero-buttons .btn {
+            padding: 12px 28px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-light-custom {
+            background-color: white;
+            color: var(--primary);
+            border: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-light-custom:hover {
+            background-color: #f8f9fa;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+            color: var(--primary-dark);
+        }
+
+        .btn-outline-light {
+            border: 2px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .btn-outline-light:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+
+        /* User Type Cards */
+        .user-type-cards {
+            margin: 80px 0 40px;
+        }
+
+        .user-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 40px 30px;
+            height: 100%;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .user-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .user-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-card:hover::before {
+            opacity: 1;
+        }
+
+        .user-card-header {
+            text-align: center;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #f0f0f0;
+            margin-bottom: 30px;
+        }
+
+        .user-card-header i {
+            font-size: 3.5rem;
+            color: var(--primary);
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .user-card-header h3 {
+            font-weight: 700;
+            color: var(--dark);
+            font-size: 1.8rem;
+            letter-spacing: -0.5px;
+        }
+
+        .user-card p {
+            color: #64748b;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .btn-action {
+            width: 100%;
+            padding: 14px 12px;
+            margin-bottom: 16px;
+            font-weight: 600;
+            border-radius: 10px;
+            font-size: 1rem;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            border-color: var(--primary-dark);
+            box-shadow: 0 6px 15px rgba(37, 99, 235, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary-outline {
+            color: var(--primary);
+            background-color: white;
+            border: 2px solid var(--primary);
+        }
+
+        .btn-primary-outline:hover {
+            background-color: rgba(37, 99, 235, 0.04);
+            color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .text-muted {
+            color: #64748b !important;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .text-muted:hover {
+            color: var(--primary) !important;
+            text-decoration: none;
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 80px 0;
+            background-color: #fff;
+            border-radius: 25px;
+            margin: 60px 0;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+        }
+
+        .section-title {
+            font-weight: 800;
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            color: var(--dark);
+            text-align: center;
+            position: relative;
+            letter-spacing: -1px;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
+
+        .feature-box {
+            text-align: center;
+            padding: 30px 20px;
+            transition: all 0.3s ease;
+            border-radius: 16px;
+            height: 100%;
+        }
+
+        .feature-box:hover {
+            background-color: #f8fafc;
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(59, 130, 246, 0.1));
+            margin-bottom: 25px;
+        }
+
+        .feature-box i {
+            font-size: 2.2rem;
+            color: var(--primary);
+        }
+
+        .feature-box h4 {
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 15px;
+            font-size: 1.35rem;
+        }
+
+        .feature-box p {
+            color: #64748b;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        /* Testimonials Section */
+        .testimonials-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #f1f5f9, #f8fafc);
+            border-radius: 25px;
+            margin-bottom: 60px;
+        }
+
+        .testimonial-card {
+            background-color: white;
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            height: 100%;
+            position: relative;
+        }
+
+        .testimonial-card::before {
+            content: '\201C';
+            font-family: Georgia, serif;
+            position: absolute;
+            top: 20px;
+            left: 25px;
+            font-size: 5rem;
+            color: rgba(37, 99, 235, 0.1);
+            line-height: 1;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            color: #475569;
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            padding-left: 15px;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+
+        .testimonial-author-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            margin-right: 15px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .testimonial-author-img i {
+            font-size: 30px;
+            color: #94a3b8;
+        }
+
+        .testimonial-author-info h5 {
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: var(--dark);
+        }
+
+        .testimonial-author-info p {
+            color: #64748b;
+            font-size: 0.95rem;
+            margin: 0;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            padding: 40px 0;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+            margin: 40px 0 80px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 10px;
+            line-height: 1;
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        /* Call to Action */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary-dark), var(--secondary));
+            padding: 70px 0;
+            color: white;
+            border-radius: 16px;
+            margin-bottom: 80px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(37, 99, 235, 0.2);
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB4PSIwIiB5PSIwIiB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSgxMCkiPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSI4IiBoZWlnaHQ9IjgiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wOCkiPjwvcmVjdD48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjcGF0dGVybikiPjwvcmVjdD48L3N2Zz4=');
+            opacity: 0.2;
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            letter-spacing: -0.5px;
+        }
+
+        .cta-text {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .btn-cta {
+            background-color: white;
+            color: var(--primary);
+            font-weight: 600;
+            padding: 14px 32px;
+            font-size: 1.1rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+            color: var(--primary-dark);
+        }
+
+        /* Footer */
+        footer {
+            background-color: #0f172a;
+            color: #cbd5e1;
+            padding: 70px 0 40px;
+            border-radius: 25px 25px 0 0;
+        }
+
+        .footer-logo {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: white;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .footer-description {
+            max-width: 350px;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        .footer-contact {
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+
+        .footer-section h5 {
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            position: relative;
+        }
+
+        .footer-section h5::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 30px;
+            height: 3px;
+            background: var(--primary);
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            display: inline-block;
+        }
+
+        .footer-links a:hover {
+            color: white;
+            transform: translateX(3px);
+        }
+
+        .social-links {
+            margin-top: 25px;
+        }
+
+        .social-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            margin-right: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+            color: white;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 40px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.95rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .hero-section {
+                padding: 80px 0 100px;
+            }
+
+            .hero-section h1 {
+                font-size: 2.8rem;
+            }
+
+            .hero-section p {
+                font-size: 1.2rem;
+            }
+
+            .section-title {
+                font-size: 2.2rem;
+            }
+
+            .cta-title {
+                font-size: 2.2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 60px 0 80px;
+            }
+
+            .hero-section h1 {
+                font-size: 2.4rem;
+            }
+
+            .hero-section p {
+                font-size: 1.1rem;
+            }
+
+            .hero-buttons .btn {
+                display: block;
+                margin: 10px auto;
+                max-width: 250px;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .cta-section {
+                text-align: center;
+            }
+
+            .footer-section {
+                margin-bottom: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">SmartCV</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/features">Features</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn-login me-2" href="/login">Log In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-register text-white" href="/register">Register</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="container text-center">
+            <h1 class="animate-fade-in">Connect, Test Skills & Find Your Perfect Match</h1>
+            <p class="animate-fade-in delay-200">SmartCV brings together students and employers in a skill-based ecosystem that ensures the right talent finds the right opportunity.</p>
+            <div class="hero-buttons animate-fade-in delay-400">
+                <a href="/register" class="btn btn-light-custom">Get Started <i class="fas fa-arrow-right ms-2"></i></a>
+                <a href="/features" class="btn btn-outline-light">Learn More</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Type Selection Cards -->
+    <div class="container user-type-cards">
+        <div class="row">
+            <!-- Student Card -->
+            <div class="col-lg-6 animate-fade-in">
+                <div class="user-card">
+                    <div class="user-card-header">
+                        <i class="fas fa-user-graduate"></i>
+                        <h3>For Students</h3>
+                    </div>
+                    <p class="mb-4">Showcase your verified skills, take coding assessments, and connect directly with companies looking for talent like you.</p>
+                    <a href="/login" class="btn btn-primary btn-action">
+                        <i class="fas fa-sign-in-alt me-2"></i> I'm an Existing Student
+                    </a>
+                    <a href="/register" class="btn btn-primary-outline btn-action">
+                        <i class="fas fa-user-plus me-2"></i> I'm a New Student
+                    </a>
+                    <div class="text-center mt-4">
+                        <a href="/student/features" class="text-muted">
+                            <small>Learn more about student features <i class="fas fa-arrow-right ms-1"></i></small>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Company Card -->
+            <div class="col-lg-6 animate-fade-in delay-200">
+                <div class="user-card">
+                    <div class="user-card-header">
+                        <i class="fas fa-building"></i>
+                        <h3>For Companies</h3>
+                    </div>
+                    <p class="mb-4">Find pre-qualified candidates, post job opportunities, and utilize our skill-matching system to hire talent efficiently.</p>
+                    <a href="/login" class="btn btn-primary btn-action">
+                        <i class="fas fa-sign-in-alt me-2"></i> I'm an Existing Company
+                    </a>
+                    <a href="/register" class="btn btn-primary-outline btn-action">
+                        <i class="fas fa-plus-circle me-2"></i> I'm a New Company
+                    </a>
+                    <div class="text-center mt-4">
+                        <a href="/company/features" class="text-muted">
+                            <small>Learn more about company features <i class="fas fa-arrow-right ms-1"></i></small>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="features-section">
+        <div class="container">
+            <h2 class="section-title">Why Choose SmartCV?</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <h4>Skill-Based Matching</h4>
+                        <p>Our intelligent algorithms match candidates to jobs based on verified skills and coding tests, not just keywords on resumes.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4 mb-md-0">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <h4>Verified Assessments</h4>
+                        <p>Take or create comprehensive coding assessments that showcase real abilities and technical expertise.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <div class="feature-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <h4>Direct Connection</h4>
+                        <p>Connect directly with potential matches without intermediaries and track application status in real-time.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Testimonials Section -->
+    <div class="testimonials-section">
+        <div class="container">
+            <h2 class="section-title">What Our Users Say</h2>
+            <div class="row">
+                <div class="col-lg-4 mb-4">
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">SmartCV helped me land my dream job by showcasing my actual coding skills. The coding assessments made my profile stand out to employers!</p>
+                        <div class="testimonial-author">
+                            <div class="testimonial-author-img">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="testimonial-author-info">
+                                <h5>Alex Johnson</h5>
+                                <p>Software Developer</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">The skill-matching system is incredible. As a recruiter, I can quickly find candidates with verified coding abilities that match our requirements.</p>
+                        <div class="testimonial-author">
+                            <div class="testimonial-author-img">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="testimonial-author-info">
+                                <h5>Sarah Williams</h5>
+                                <p>HR Manager</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">SmartCV streamlined our entire hiring process. We were able to find and hire qualified developers in half the time compared to traditional methods.</p>
+                        <div class="testimonial-author">
+                            <div class="testimonial-author-img">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="testimonial-author-info">
+                                <h5>Michael Chen</h5>
+                                <p>Tech Lead</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="container">
+        <div class="stats-section">
+            <div class="row">
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number">5000+</div>
+                        <div class="stat-label">Active Students</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number">750+</div>
+                        <div class="stat-label">Companies</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number">1200+</div>
+                        <div class="stat-label">Job Matches</div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stat-item">
+                        <div class="stat-number">98%</div>
+                        <div class="stat-label">Satisfaction Rate</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="container">
+        <div class="cta-section">
+            <div class="container text-center">
+                <h2 class="cta-title">Ready to Connect with Opportunities?</h2>
+                <p class="cta-text">Join thousands of students and companies already benefiting from our skill-based matching platform.</p>
+                <a href="/register" class="btn btn-cta">Create Your Account Today <i class="fas fa-arrow-right ms-2"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <div class="footer-section">
+                        <a href="/" class="footer-logo">SmartCV</a>
+                        <p class="footer-description">Your ultimate platform to connect students with employers through verified skill assessments and intelligent matching.</p>
+                        <p class="footer-contact">
+                            <i class="fas fa-envelope me-2"></i> contact@smartcv.com<br>
+                            <i class="fas fa-phone me-2"></i> +1 234 567 890
+                        </p>
+                        <div class="social-links">
+                            <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                    <div class="footer-section">
+                        <h5>Company</h5>
+                        <ul class="footer-links">
+                            <li><a href="/about">About Us</a></li>
+                            <li><a href="/team">Our Team</a></li>
+                            <li><a href="/careers">Careers</a></li>
+                            <li><a href="/press">Press</a></li>
+                            <li><a href="/blog">Blog</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                    <div class="footer-section">
+                        <h5>Features</h5>
+                        <ul class="footer-links">
+                            <li><a href="/features/students">For Students</a></li>
+                            <li><a href="/features/companies">For Companies</a></li>
+                            <li><a href="/assessments">Assessments</a></li>
+                            <li><a href="/matching">Skill Matching</a></li>
+                            <li><a href="/pricing">Pricing</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                    <div class="footer-section">
+                        <h5>Support</h5>
+                        <ul class="footer-links">
+                            <li><a href="/help">Help Center</a></li>
+                            <li><a href="/faq">FAQs</a></li>
+                            <li><a href="/contact">Contact Us</a></li>
+                            <li><a href="/feedback">Feedback</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <div class="footer-section">
+                        <h5>Legal</h5>
+                        <ul class="footer-links">
+                            <li><a href="/privacy">Privacy Policy</a></li>
+                            <li><a href="/terms">Terms of Service</a></li>
+                            <li><a href="/cookies">Cookie Policy</a></li>
+                            <li><a href="/security">Security</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 SmartCV. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JS -->
+    <script>
+        // Add shadow to navbar on scroll
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.08)';
+                navbar.style.padding = '10px 0';
+            } else {
+                navbar.style.boxShadow = '0 2px 15px rgba(0, 0, 0, 0.04)';
+                navbar.style.padding = '15px 0';
+            }
+        });
+
+        // Initialize animation on scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const animateElements = document.querySelectorAll('.animate-fade-in');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            animateElements.forEach(element => {
+                element.style.opacity = '0';
+                observer.observe(element);
+            });
+        });
+    </script>
+</body>
+</html>
